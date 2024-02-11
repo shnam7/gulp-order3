@@ -1,0 +1,25 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "display": "Default",
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "declaration": true,
+        "sourceMap": false,
+        "declarationMap": false,
+        "esModuleInterop": true,
+        "incremental": false,
+        "isolatedModules": true,
+        "moduleDetection": "force",
+        "noUncheckedIndexedAccess": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "noEmitOnError": true,
+        "noImplicitAny": true,
+        "strict": false, // this is required to for using 'this' inside the plugin function
+        "outDir": "./dist"
+    },
+    "include": ["./src/**/*.ts"],
+    "exclude": ["node_modules"]
+}

@@ -1,0 +1,7 @@
+/__*/
+.vscode/
+node_modules/
+*.map
+.turbo/
+coverage/
+dist/
