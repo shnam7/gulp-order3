@@ -1,7 +1,11 @@
 {
     "name": "gulp-order3",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "An ESM type gulp plugin that re-orders the files in gulp stream.",
+    "type": "module",
+    "types": "./dist/index.d.ts",
+    "main": "./dist/index.js",
+    "exports": "./dist/index.js",
     "keywords": [
         "gulp",
         "gulp4",
@@ -25,7 +29,6 @@
     "files": [
         "dist/*"
     ],
-    "main": "./dist/index.js",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/shnam7/gulp-order3.git"
@@ -38,29 +41,28 @@
         "test:watch": "vitest watch --coverage",
         "rebuild": "run-s clean build",
         "prepare-to-commit": "run-s rebuild test",
-        "prepare": "npm run build",
         "npm-dryrun": "npm publish --dry-run"
     },
     "dependencies": {
-        "minimatch": "^9.0.3",
-        "vinyl": "^3.0.0"
+        "minimatch": "^9.0.4",
+        "streamx": "^2.16.1"
     },
     "devDependencies": {
         "@types/minimatch": "^5.1.2",
-        "@types/node": "^20.11.17",
+        "@types/node": "^20.12.5",
+        "@types/streamx": "^2.9.5",
         "@types/through2": "^2.0.41",
         "@types/vinyl": "^2.0.11",
-        "@vitest/coverage-v8": "^1.2.2",
+        "@vitest/coverage-v8": "^1.4.0",
         "npm-run-all": "^4.1.5",
         "rimraf": "^5.0.5",
         "through2": "^4.0.2",
-        "typescript": "^5.3.3",
-        "vitest": "^1.2.2"
+        "typescript": "^5.4.4",
+        "vinyl": "^3.0.0",
+        "vitest": "^1.4.0"
     },
-    "type": "module",
-    "types": "./dist/index.d.ts",
-    "exports": "./dist/index.js",
     "engines": {
         "node": ">=14.15"
-    }
+    },
+    "packageManager": "pnpm@8.15.6+sha256.01c01eeb990e379b31ef19c03e9d06a14afa5250b82e81303f88721c99ff2e6f"
 }

@@ -1,13 +1,13 @@
-import through, { TransformCallback } from 'through2'
+import { Transform } from 'streamx'
 import { minimatch } from 'minimatch'
 import path from 'path'
-import File from 'vinyl'
+import type File from 'vinyl'
 
 export type Options = {
     base?: string
 }
 
-const order = function(patterns?: string | string[], options: Options = {}) {
+const order = function(patterns?: string | string[], options: Options = {}): NodeJS.ReadWriteStream {
 
     if (!patterns) patterns = []        // accept empty argument
     if (!Array.isArray(patterns)) patterns = [patterns]
@@ -20,11 +20,6 @@ const order = function(patterns?: string | string[], options: Options = {}) {
         return new minimatch.Minimatch(pattern)
     })
 
-    function onFile(file: File, enc: BufferEncoding, cb: TransformCallback) {
-        files.push(file)
-        cb()
-    }
-
     const relative = (file: File): string => (options.base) ? path.relative(options.base, file.path) : file.relative
 
     const rank = function(s: string) {
@@ -36,24 +31,28 @@ const order = function(patterns?: string | string[], options: Options = {}) {
         return matchers.length
     }
 
-    function onEnd(cb: TransformCallback) {
-        // sort.inplace(files, function(a, b) {
-        files.sort((a: File, b: File) => {
-            const aIndex = rank(relative(a))
-            const bIndex = rank(relative(b))
+    return new Transform({
+        transform(file, cb) {
+            files.push(file)
+            cb()
+        },
+        flush(cb) {
+            // sort.inplace(files, function(a, b) {
+            files.sort((a: File, b: File) => {
+                const aIndex = rank(relative(a))
+                const bIndex = rank(relative(b))
 
-            if (aIndex === bIndex) {
-                return String(relative(a)).localeCompare(relative(b))
-            } else {
-                return aIndex - bIndex
-            }
-        })
-        files.forEach(file => this.push(file))
+                if (aIndex === bIndex) {
+                    return String(relative(a)).localeCompare(relative(b))
+                } else {
+                    return aIndex - bIndex
+                }
+            })
+            files.forEach(file => this.push(file))
 
-        cb()
-    };
-
-    return through.obj(onFile, onEnd)
+            cb()
+        }
+    }) as unknown as NodeJS.ReadWriteStream
 }
 
 export { order }

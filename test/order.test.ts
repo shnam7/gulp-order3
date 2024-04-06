@@ -2,11 +2,13 @@ import { describe, expect, it } from 'vitest'
 import order from '../src/index.js'
 import path from 'path'
 import File from 'vinyl'
-import { TransformCallback } from 'through2'
+import type { Transform } from 'streamx'
 
 const cwd = process.cwd()
 
-const newFile = (filepath: string, base?: string): File => {
+const orderedStream = (...args: any[]) => order(...args) as unknown as Transform
+
+const newFile = (filepath: string, base?: string): any => {
     if (!base) base = cwd
 
     return new File({
@@ -19,7 +21,7 @@ const newFile = (filepath: string, base?: string): File => {
 
 describe('order()', () => {
     it('accepts no arguments call', () => {
-        const stream = order()
+        const stream = orderedStream()
         const files: File[] = []
         stream.on('data', file => files.push(file))
         stream.on('end', () => {
@@ -31,7 +33,7 @@ describe('order()', () => {
     })
 
     it('accepts non array string argument', () => {
-        const stream = order('foo.js')
+        const stream = orderedStream('foo.js')
         const files: File[] = []
         stream.on('data', file => files.push(file))
         stream.on('end', () => {
@@ -42,8 +44,8 @@ describe('order()', () => {
         return stream.end()
     })
 
-    it('orders files', (done: TransformCallback) => {
-        const stream = order(['foo.js', 'bar.js'])
+    it('orders files', (done) => {
+        const stream = orderedStream(['foo.js', 'bar.js'])
 
         const files: File[] = []
         stream.on('data', file => {
@@ -65,7 +67,7 @@ describe('order()', () => {
     })
 
     it('supports globs', () => {
-        const stream = order(['vendor/**/*', 'app/**/*'])
+        const stream = orderedStream(['vendor/**/*', 'app/**/*'])
 
         const files: File[] = []
         stream.on('data', files.push.bind(files))
@@ -87,7 +89,7 @@ describe('order()', () => {
     })
 
     it('supports a custom base', () => {
-        const stream = order(['scripts/b.css'], { base: cwd })
+        const stream = orderedStream(['scripts/b.css'], { base: cwd })
 
         const files: File[] = []
         stream.on('data', files.push.bind(files))
