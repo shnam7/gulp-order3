@@ -1,11 +1,45 @@
 {
     "name": "gulp-order3",
-    "version": "1.0.1",
+    "version": "1.0.3",
     "description": "An ESM type gulp plugin that re-orders the files in gulp stream.",
     "type": "module",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
     "types": "./dist/index.d.ts",
-    "main": "./dist/index.js",
-    "exports": "./dist/index.js",
+    "exports": {
+        "require": "./dist/index.cjs",
+        "import": "./dist/index.js"
+    },
+    "files": [
+        "dist/*"
+    ],
+    "scripts": {
+        "build": "tsup src/index.ts --format cjs,esm --dts",
+        "dev": "pnpm run build --watch",
+        "lint": "tsc",
+        "clean": "rimraf ./dist ./coverage",
+        "test": "vitest run --coverage",
+        "test:watch": "vitest watch --coverage",
+        "rebuild": "run-s clean build",
+        "prepare-to-commit": "run-s rebuild lint test",
+        "npm-dryrun": "npm publish --dry-run"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/shnam7/gulp-order3.git"
+    },
+    "homepage": "https://github.com/shnam7/gulp-order3#readme",
+    "bugs": {
+        "url": "https://github.com/shnam7/gulp-order3/issues"
+    },
+    "author": {
+        "name": "Robin Nam",
+        "email": "shnam7@gmail.com"
+    },
+    "license": "MIT",
+    "publishConfig": {
+        "access": "public"
+    },
     "keywords": [
         "gulp",
         "gulp4",
@@ -17,46 +51,23 @@
         "es2015",
         "typescript"
     ],
-    "homepage": "https://github.com/shnam7/gulp-order3#readme",
-    "bugs": {
-        "url": "https://github.com/shnam7/gulp-order3/issues"
-    },
-    "license": "MIT",
-    "author": {
-        "name": "Robin Nam",
-        "email": "shnam7@gmail.com"
-    },
-    "files": [
-        "dist/*"
-    ],
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/shnam7/gulp-order3.git"
-    },
-    "scripts": {
-        "dev": "tsc --watch",
-        "build": "tsc",
-        "clean": "rimraf ./dist ./coverage",
-        "test": "vitest run --coverage",
-        "test:watch": "vitest watch --coverage",
-        "rebuild": "run-s clean build",
-        "prepare-to-commit": "run-s rebuild test",
-        "npm-dryrun": "npm publish --dry-run"
-    },
     "dependencies": {
         "minimatch": "^9.0.4",
         "streamx": "^2.16.1"
     },
     "devDependencies": {
+        "@changesets/cli": "^2.27.1",
         "@types/minimatch": "^5.1.2",
         "@types/node": "^20.12.5",
         "@types/streamx": "^2.9.5",
         "@types/through2": "^2.0.41",
         "@types/vinyl": "^2.0.11",
         "@vitest/coverage-v8": "^1.4.0",
+        "changesets": "^1.0.2",
         "npm-run-all": "^4.1.5",
         "rimraf": "^5.0.5",
         "through2": "^4.0.2",
+        "tsup": "^8.0.2",
         "typescript": "^5.4.4",
         "vinyl": "^3.0.0",
         "vitest": "^1.4.0"

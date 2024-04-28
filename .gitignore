@@ -1,7 +1,8 @@
-/__*/
-.vscode/
 node_modules/
-*.map
+.vscode/
 .turbo/
+.changeset/
+/__*/
+*.map
 coverage/
 dist/

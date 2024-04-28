@@ -1,6 +1,6 @@
 # gulp-order3
 
-ESM type gulp plugin that re-orders the files in gulp stream.
+Gulp plugin that re-orders the files in gulp stream.
 
 **Note**
 
@@ -36,9 +36,24 @@ You'll need two streams:
 
 To combine the streams you can pipe into another `gulp.src` or use `es.merge` (from `event-stream`). But you'll notice that in both cases the files are emitted in the same order as they come in - and this can seem very random. With `gulp-order` you can reorder the files.
 
+
 ## Usage
 
-Use _import_ declaration to use the module: `import order from 'gulp-order3`.
+For ESM mode:
+```ts
+import order from 'gulp-order3'
+
+// or
+import { order } from 'gulp-order3'
+```
+
+For CommonJS mode:
+```ts
+const { order } = require('gulp-order3')
+```
+
+
+## API
 
 ```ts
 order(patterns?: string | string[], options: Options = {}) => stream.Transform
