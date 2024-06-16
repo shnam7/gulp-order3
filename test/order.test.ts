@@ -1,29 +1,27 @@
-import { describe, expect, it } from 'vitest'
+import path from 'node:path'
+import process from 'node:process'
+import {describe, expect, it} from 'vitest'
+import Vinyl from 'vinyl'
 import order from '../src/index.js'
-import path from 'path'
-import File from 'vinyl'
-import type { Transform } from 'streamx'
 
 const cwd = process.cwd()
 
-const orderedStream = (...args: any[]) => order(...args) as unknown as Transform
-
 const newFile = (filepath: string, base?: string): any => {
-    if (!base) base = cwd
+    base ||= cwd
 
-    return new File({
+    return new Vinyl({
         path: path.join(base, filepath),
         base,
         cwd,
-        contents: Buffer.from('')
+        contents: Buffer.from(''),
     })
 }
 
 describe('order()', () => {
     it('accepts no arguments call', () => {
-        const stream = orderedStream()
-        const files: File[] = []
-        stream.on('data', file => files.push(file))
+        const stream = order()
+        const files: Vinyl[] = []
+        stream.on('data', (file: Vinyl) => files.push(file))
         stream.on('end', () => {
             expect(files.length).toBe(1)
             expect(files[0].relative).to.equal('foo.js')
@@ -33,9 +31,9 @@ describe('order()', () => {
     })
 
     it('accepts non array string argument', () => {
-        const stream = orderedStream('foo.js')
-        const files: File[] = []
-        stream.on('data', file => files.push(file))
+        const stream = order('foo.js')
+        const files: Vinyl[] = []
+        stream.on('data', (file: Vinyl) => files.push(file))
         stream.on('end', () => {
             expect(files.length).toBe(1)
             expect(files[0].relative).to.equal('foo.js')
@@ -44,11 +42,11 @@ describe('order()', () => {
         return stream.end()
     })
 
-    it('orders files', (done) => {
-        const stream = orderedStream(['foo.js', 'bar.js'])
+    it('orders files', done => {
+        const stream = order(['foo.js', 'bar.js'])
 
-        const files: File[] = []
-        stream.on('data', file => {
+        const files: Vinyl[] = []
+        stream.on('data', (file: Vinyl) => {
             files.push(file)
         })
         stream.on('end', () => {
@@ -67,11 +65,11 @@ describe('order()', () => {
     })
 
     it('supports globs', () => {
-        const stream = orderedStream(['vendor/**/*', 'app/**/*'])
+        const stream = order(['vendor/**/*', 'app/**/*'])
 
-        const files: File[] = []
-        stream.on('data', files.push.bind(files))
-        stream.on('end', function() {
+        const files: Vinyl[] = []
+        stream.on('data', files.push.bind(files) as (file: Vinyl) => void)
+        stream.on('end', function () {
             expect(files.length).to.equal(5)
             expect(files[0].relative).to.equal('vendor/f/b.js')
             expect(files[1].relative).to.equal('vendor/z/a.js')
@@ -89,11 +87,11 @@ describe('order()', () => {
     })
 
     it('supports a custom base', () => {
-        const stream = orderedStream(['scripts/b.css'], { base: cwd })
+        const stream = order(['scripts/b.css'], {base: cwd})
 
-        const files: File[] = []
-        stream.on('data', files.push.bind(files))
-        stream.on('end', function() {
+        const files: Vinyl[] = []
+        stream.on('data', files.push.bind(files) as (file: Vinyl) => void)
+        stream.on('end', function () {
             expect(files.length).toEqual(2)
             expect(files[0].relative).to.equal('b.css')
             expect(files[1].relative).to.equal('a.css')
@@ -104,8 +102,8 @@ describe('order()', () => {
         return stream.end()
     })
 
-    return it('warns on relative paths in order list', () =>
-        expect(() => order(['./user.js']))
-            .to.throw('Do not start patterns with `./` - they will never match. Just leave out `./`')
-    )
+    it('warns on relative paths in order list', () =>
+        expect(() => order(['./user.js'])).to.throw(
+            'Do not start patterns with `./` - they will never match. Just leave out `./`',
+        ))
 })

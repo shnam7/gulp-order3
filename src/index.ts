@@ -1,63 +1,52 @@
-import { Transform } from 'streamx'
-import { minimatch } from 'minimatch'
-import path from 'path'
-import type File from 'vinyl'
+import path from 'node:path'
+import {Transform, type TransformCallback} from 'node:stream'
+import {minimatch} from 'minimatch'
+import type Vinyl from 'vinyl'
 
 export type Options = {
     base?: string
 }
 
-const order = function(patterns?: string | string[], options: Options = {}): NodeJS.ReadWriteStream {
-
-    if (!patterns) patterns = []        // accept empty argument
+function order(patterns?: string | string[], options: Options = {}): Transform {
+    patterns ||= [] // accept empty argument
     if (!Array.isArray(patterns)) patterns = [patterns]
-    const files: File[] = []
-
-    const matchers = patterns.map(function(pattern) {
-        if (pattern.indexOf('./') === 0)
-            throw new Error('Do not start patterns with `./` - they will never match. Just leave out `./`')
-
+    const files: Vinyl[] = []
+    const matchers = patterns.map(function (pattern) {
+        if (pattern.startsWith('./'))
+            throw new Error(
+                'Do not start patterns with `./` - they will never match. Just leave out `./`',
+            )
         return new minimatch.Minimatch(pattern)
     })
-
-    const relative = (file: File): string => (options.base) ? path.relative(options.base, file.path) : file.relative
-
-    const rank = function(s: string) {
-        for (let index = 0; index < matchers.length; index++) {
-            const matcher = matchers[index]
-            if (matcher.match(s)) return index
+    const relative = (file: Vinyl): string =>
+        options.base ? path.relative(options.base, file.path) : file.relative
+    const rank = function (s: string) {
+        for (const [index, matcher] of matchers.entries()) {
+            if (matcher.match(s)) return index // eslint-disable-line unicorn/prefer-regexp-test
         }
 
         return matchers.length
     }
 
-    return new Transform({
-        transform(file, cb) {
-            files.push(file)
-            cb()
-        },
-        flush(cb) {
-            // sort.inplace(files, function(a, b) {
-            files.sort((a: File, b: File) => {
-                const aIndex = rank(relative(a))
-                const bIndex = rank(relative(b))
+    function transform(file: Vinyl, enc: BufferEncoding, cb: TransformCallback) {
+        files.push(file)
+        cb()
+    }
 
-                if (aIndex === bIndex) {
-                    return String(relative(a)).localeCompare(relative(b))
-                } else {
-                    return aIndex - bIndex
-                }
-            })
-            files.forEach(file => this.push(file))
+    function flush(cb: () => void) {
+        files.sort((a: Vinyl, b: Vinyl) => {
+            const aIndex = rank(relative(a))
+            const bIndex = rank(relative(b))
+            return aIndex === bIndex
+                ? String(relative(a)).localeCompare(relative(b))
+                : aIndex - bIndex
+        })
 
-            cb()
-        }
-    }) as unknown as NodeJS.ReadWriteStream
+        for (const file of files) (this as Transform).push(file)
+        cb()
+    }
+
+    return new Transform({objectMode: true, highWaterMark: 16, transform, flush})
 }
 
-export { order }
 export default order
-
-// ES5/ES6 fallbacks
-// module.exports = order
-// module.exports.default = order
