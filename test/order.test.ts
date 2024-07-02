@@ -42,7 +42,7 @@ describe('order()', () => {
         return stream.end()
     })
 
-    it('orders files', done => {
+    it('orders files', () => {
         const stream = order(['foo.js', 'bar.js'])
 
         const files: Vinyl[] = []

@@ -1,6 +1,6 @@
 {
     "name": "gulp-order3",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "An ESM type gulp plugin that re-orders the files in gulp stream.",
     "type": "module",
     "main": "./dist/index.cjs",
@@ -49,19 +49,19 @@
         "typescript"
     ],
     "dependencies": {
-        "minimatch": "^9.0.4"
+        "minimatch": "^9.0.5"
     },
     "devDependencies": {
-        "@changesets/cli": "^2.27.5",
+        "@changesets/cli": "^2.27.7",
         "@types/minimatch": "^5.1.2",
-        "@types/node": "^20.14.2",
+        "@types/node": "^20.14.9",
         "@types/vinyl": "^2.0.12",
         "@vitest/coverage-v8": "^1.6.0",
         "changesets": "^1.0.2",
         "npm-run-all": "^4.1.5",
         "rimraf": "^5.0.7",
         "tsup": "^8.1.0",
-        "typescript": "^5.4.5",
+        "typescript": "^5.5.3",
         "vinyl": "^3.0.0",
         "vitest": "^1.6.0",
         "xo": "^0.58.0"
@@ -69,5 +69,5 @@
     "engines": {
         "node": ">=15"
     },
-    "packageManager": "pnpm@9.3.0+sha512.ee7b93e0c2bd11409c6424f92b866f31d3ea1bef5fbe47d3c7500cdc3c9668833d2e55681ad66df5b640c61fa9dc25d546efa54d76d7f8bf54b13614ac293631"
+    "packageManager": "pnpm@9.4.0+sha512.f549b8a52c9d2b8536762f99c0722205efc5af913e77835dbccc3b0b0b2ca9e7dc8022b78062c17291c48e88749c70ce88eb5a74f1fa8c4bf5e18bb46c8bd83a"
 }

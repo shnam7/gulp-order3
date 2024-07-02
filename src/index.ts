@@ -1,6 +1,6 @@
 import path from 'node:path'
 import {Transform, type TransformCallback} from 'node:stream'
-import {minimatch} from 'minimatch'
+import {Minimatch} from 'minimatch'
 import type Vinyl from 'vinyl'
 
 export type Options = {
@@ -16,7 +16,7 @@ function order(patterns?: string | string[], options: Options = {}): Transform {
             throw new Error(
                 'Do not start patterns with `./` - they will never match. Just leave out `./`',
             )
-        return new minimatch.Minimatch(pattern)
+        return new Minimatch(pattern)
     })
     const relative = (file: Vinyl): string =>
         options.base ? path.relative(options.base, file.path) : file.relative

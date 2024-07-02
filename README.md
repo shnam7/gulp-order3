@@ -42,14 +42,11 @@ To combine the streams you can pipe into another `gulp.src` or use `es.merge` (f
 For ESM mode:
 ```ts
 import order from 'gulp-order3'
-
-// or
-import { order } from 'gulp-order3'
 ```
 
 For CommonJS mode:
 ```ts
-const { order } = require('gulp-order3')
+const order = require('gulp-order3')
 ```
 
 
