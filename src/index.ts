@@ -8,7 +8,7 @@ export type Options = {
 }
 
 function order(patterns?: string | string[], options: Options = {}): Transform {
-    patterns ||= [] // accept empty argument
+    patterns ??= [] // accept empty argument
     if (!Array.isArray(patterns)) patterns = [patterns]
     const files: Vinyl[] = []
     const matchers = patterns.map(function (pattern) {

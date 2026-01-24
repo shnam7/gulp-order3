@@ -1,5 +1,6 @@
 import path from 'node:path'
 import process from 'node:process'
+import {Buffer} from 'node:buffer'
 import {describe, expect, it} from 'vitest'
 import Vinyl from 'vinyl'
 import order from '../src/index.js'
@@ -7,7 +8,7 @@ import order from '../src/index.js'
 const cwd = process.cwd()
 
 const newFile = (filepath: string, base?: string): any => {
-    base ||= cwd
+    base ??= cwd
 
     return new Vinyl({
         path: path.join(base, filepath),
@@ -102,8 +103,9 @@ describe('order()', () => {
         return stream.end()
     })
 
-    it('warns on relative paths in order list', () =>
+    it('warns on relative paths in order list', () => {
         expect(() => order(['./user.js'])).to.throw(
             'Do not start patterns with `./` - they will never match. Just leave out `./`',
-        ))
+        )
+    })
 })
