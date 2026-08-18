@@ -1,26 +1,47 @@
 {
-    "$schema": "https://json.schemastore.org/tsconfig",
-    "display": "Default",
-    "compilerOptions": {
-        "target": "ESNext",
-        "module": "NodeNext",
-        "moduleResolution": "NodeNext",
-        "declaration": true,
-        "sourceMap": false,
-        "declarationMap": false,
-        "esModuleInterop": true,
-        "incremental": false,
-        "isolatedModules": true,
-        "moduleDetection": "force",
-        "noUncheckedIndexedAccess": true,
-        "resolveJsonModule": true,
-        "skipLibCheck": true,
-        "noEmitOnError": true,
-        "noImplicitAny": true,
-        "strict": false, // this is required to for using 'this' inside the plugin function
-        "strictNullChecks": true,
-        "outDir": "./dist"
-    },
-    "include": ["./src/**/*.ts"],
-    "exclude": ["node_modules"]
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Default",
+  "compilerOptions": {
+    // Environment setup & latest features
+    "lib": ["ESNext"],
+    "target": "ESNext",
+    "module": "Preserve",
+    "moduleDetection": "force",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "types": ["node"],
+
+    // Bundler mode
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+
+    // Best practices
+    "strict": false, // this is required to for using 'this' inside the plugin function
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+
+    // Some stricter flags (disabled by default)
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noPropertyAccessFromIndexSignature": false,
+
+    // other options
+    "sourceMap": false,
+    "declarationMap": false,
+    "esModuleInterop": true,
+    "incremental": false,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "noEmitOnError": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+
+    "outDir": "./dist"
+  }
+  //   "include": ["./src/**/*.ts", "./test/**/*.ts", "./*.ts"]
+  //   "exclude": ["node_modules"]
 }
