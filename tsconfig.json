@@ -31,10 +31,12 @@
 
     // other options
     "sourceMap": false,
+    "declaration": true,
     "declarationMap": false,
     "esModuleInterop": true,
     "incremental": false,
     "isolatedModules": true,
+    "isolatedDeclarations": true,
     "resolveJsonModule": true,
     "noEmitOnError": true,
     "noImplicitAny": true,

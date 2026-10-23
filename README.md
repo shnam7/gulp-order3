@@ -17,20 +17,18 @@ pnpm i --save-dev gulp-order3
 
 # or
 
-yarn add gulp-order2 --dev
+yarn add gulp-order3 --dev
 ```
 
 ## Motivation
 
 Assume you want to concatenate the following files in the given order (with `gulp-concat`):
-
 - `vendor/js1.js`
 - `vendor/**/*.{coffee,js}`
 - `app/coffee1.coffee`
 - `app/**/*.{coffee,js}`
 
 You'll need two streams:
-
 - A stream that emits the JavaScript files, and
 - a stream that emits the compiled CoffeeScript files.
 
@@ -41,13 +39,13 @@ To combine the streams you can pipe into another `gulp.src` or use `es.merge` (f
 For ESM mode:
 
 ```ts
-import order from 'gulp-order3'
+import order from "gulp-order3";
 ```
 
 For CommonJS mode:
 
 ```ts
-const order = require('gulp-order3')
+const order = require("gulp-order3");
 ```
 
 ## API
@@ -61,17 +59,18 @@ order(patterns?: string | string[], options: Options = {}) => stream.Transform
 pattern can be a string or an array of strings containing filenames in expected sequence. It can also be `undefined`, which results in no ordering.
 
 ```javascript
-import gulp from 'gulp'
-import order from 'gulp-order3'
-import coffee from 'gulp-coffee'
-import concat from 'gulp-concat'
+import gulp from "gulp";
+import order from "gulp-order3";
+import coffee from "gulp-coffee";
+import concat from "gulp-concat";
 
-gulp.src('**/*.coffee')
-    .pipe(coffee())
-    .pipe(gulp.src('**/*.js')) // gulp.src passes through input
-    .pipe(order(['vendor/js1.js', 'vendor/**/*.js', 'app/coffee1.js', 'app/**/*.js']))
-    .pipe(concat('all.js'))
-    .pipe(gulp.dest('dist'))
+gulp
+  .src("**/*.coffee")
+  .pipe(coffee())
+  .pipe(gulp.src("**/*.js")) // gulp.src passes through input
+  .pipe(order(["vendor/js1.js", "vendor/**/*.js", "app/coffee1.js", "app/**/*.js"]))
+  .pipe(concat("all.js"))
+  .pipe(gulp.dest("dist"));
 ```
 
 ## Options
@@ -101,8 +100,7 @@ Uses [`minimatch`](https://github.com/isaacs/minimatch) for matching.
 If your files aren't being ordered in the manner that you expect, try adding the [`base`](#base) option.
 
 Make sure that your environment satisfies following requirements:
-
-- Node: >=14.13
+- Node: >=15
 - Gulp: >=4.0
 
 ## License
